@@ -42,11 +42,8 @@ jobs:
               run: |
                 git config user.name "github-actions[bot]"
                 git config user.email "github-actions[bot]@users.noreply.github.com"
-
-            - name: Run Semantic Release (develop - prerelease)
-              if: github.ref_name == 'develop'
-              run: semantic-release --prerelease
-
-            - name: Run Semantic Release (main - stable)
-              if: github.ref_name == 'main'
-              run: semantic-release
+            
+            - name: Run Semantic Release
+              run: |
+                semantic-release version --changelog
+                semantic-release publish
