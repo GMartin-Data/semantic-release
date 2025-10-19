@@ -1,7 +1,7 @@
 # ===== PROJECT'S METADATA =====
 [project]
 name = "semantic-release"
-version = "0.1.0" # Current package version, automatically updated by semantic-release
+version = "1.0.0-beta.1" # Current package version, automatically updated by semantic-release
 description = "Semantic release automation tool for Python projects using uv"
 readme = "README.md"
 requires-python = ">=3.12"
