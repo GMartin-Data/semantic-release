@@ -16,13 +16,14 @@ jobs:
         runs-on: ubuntu-latest
         concurrency: release-${{ github.ref }} # Prevents concurrent releases on the same branch
         env:
-            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # May be searched by semantic-release within steps
+            GH_TOKEN: ${{ secrets.PAT_TOKEN }} # May be searched by semantic-release within steps
 
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
               with:
                 fetch-depth: 0  # Explore all history for all branches and tags
+                token: ${{ secrets.PAT_TOKEN }}  # Use PAT to have permissions to push tags and commits
 
             - name: Install uv
               uses: astral-sh/setup-uv@v7
