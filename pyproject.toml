@@ -1,7 +1,65 @@
+# ===== PROJECT'S METADATA =====
 [project]
 name = "semantic-release"
-version = "0.1.0"
-description = "Add your description here"
+version = "0.1.0" # Current package version, automatically updated by semantic-release
+description = "Semantic release automation tool for Python projects using uv"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = []
+
+
+# ===== PROJECT'S BUILD SYSTEM =====
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+
+# ===== HATCHLING CONFIGURATION =====
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+
+# ===== SEMANTIC RELEASE - MAIN CONFIGURATION =====
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+branch = "main" # Branch for stable releases
+
+# Command to build the project before creating a release
+# 1. Update uv.lock with the new version
+# 2. Stage the updated uv.lock file and include it in the release commit
+# 3. Build the distributions (.tar.gz and .whl)
+build_command = """
+uv lock --upgrade-package semantic-release
+git add uv.lock
+uv build
+"""
+
+# major_on_zero = false # Disable major version bumps when current version is 0.x.x
+upload_to_pypi = false # Disable automatic upload to PyPI
+upload_to_release = true # GitHub releases upload, with artifacts
+
+
+# ===== SEMANTIC RELEASE - BRANCHES SETTINGS =====
+[tool.semantic_release.branches.main]
+match = "main"
+prerelease = false
+
+[tool.semantic_release.branches.develop]
+match = "develop"
+prerelease = true
+prerelease_token = "beta"
+
+
+# ===== SEMANTIC RELEASE - COMMITS ANALYSIS CONFIGURATION =====
+[tool.semantic_release.commit_parser_options]
+allowed_tags = ["feat", "fix", "docs", "style", "refactor", "perf", "test", "chore", "build", "ci"]
+minor_tags = ["feat"]
+patch_tags = ["fix", "perf"]
+
+
+# ===== SEMANTIC RELEASE - CHANGELOG CONFIGURATION =====
+[tool.semantic_release.changelog]
+exclude_commit_patterns = []
+
+[tool.semantic_release.changelog.default_templates]
+changelog_file = "CHANGELOG.md"
