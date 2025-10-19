@@ -1,0 +1,52 @@
+name: Semantic Release
+
+on:
+    push:
+        branches:
+            - main
+            - develop
+
+permissions:
+    contents: write  # allows to push commits and create tags
+    pull-requests: write  # allows to automatically comment on PRs after merging
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+        concurrency: release-${{ github.ref }} # Prevents concurrent releases on the same branch
+        env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # May be searched by semantic-release within steps
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: 0  # Explore all history for all branches and tags
+
+            - name: Install uv
+              uses: astral-sh/setup-uv@v7
+
+            - name: Install Python (via uv)
+              run: uv python install
+
+            - name: Install python-semantic-release
+              run: uv pip install --system python-semantic-release
+
+            - name: Initialize uv.lock if missing
+              run: |
+                if [[ ! -f uv.lock ]]; then
+                  uv lock
+                fi
+
+            - name: Configure git
+              run: |
+                git config user.name "github-actions[bot]"
+                git config user.email "github-actions[bot]@users.noreply.github.com"
+
+            - name: Run Semantic Release (develop - prerelease)
+              if: github.ref_name == 'develop'
+              run: semantic-release --prerelease
+
+            - name: Run Semantic Release (main - stable)
+              if: github.ref_name == 'main'
+              run: semantic-release
