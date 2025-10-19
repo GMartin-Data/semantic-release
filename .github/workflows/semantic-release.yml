@@ -30,7 +30,7 @@ jobs:
               run: uv python install
 
             - name: Install python-semantic-release
-              run: uv pip install --system python-semantic-release
+              run: uv tool install python-semantic-release
 
             - name: Initialize uv.lock if missing
               run: |
