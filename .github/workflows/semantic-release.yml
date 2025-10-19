@@ -7,8 +7,9 @@ on:
             - develop
 
 permissions:
-    contents: write  # allows to push commits and create tags
-    pull-requests: write  # allows to automatically comment on PRs after merging
+    contents: write  # Allows to push commits and create tags
+    pull-requests: write  # Allows to automatically comment on PRs after merging
+    actions: write # Allows bypassing branch protection rules for automated version commits
 
 jobs:
     release:
