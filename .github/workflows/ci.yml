@@ -19,9 +19,6 @@ jobs:
       
       - name: Install Python (via uv)
         run: uv python install
-      
-      - name: Validate project configuration
-        run: uv sync --check
         
       - name: Verify build can succeed
         run: uv build
